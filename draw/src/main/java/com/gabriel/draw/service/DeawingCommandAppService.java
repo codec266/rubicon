@@ -1,6 +1,7 @@
 package com.gabriel.draw.service;
 
 import com.gabriel.draw.command.AddShapeCommand;
+import com.gabriel.draw.command.SetDrawModeCommand;
 import com.gabriel.drawfx.DrawMode;
 import com.gabriel.drawfx.ShapeMode;
 import com.gabriel.drawfx.command.Command;

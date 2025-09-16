@@ -13,7 +13,6 @@ public class DrawingView extends JPanel {
     AppService appService;
 
     public DrawingView(AppService appService){
-
         this.appService = appService;
         appService.setView(this);
 
@@ -21,10 +20,10 @@ public class DrawingView extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        super.paint(g);
         Drawing drawing = (Drawing) appService.getModel();
         for(Shape shape : drawing.getShapes()){
-            shape.getRendererService().render(g, shape, true);
-            appService.setView(this);
+            shape.getRendererService().render(g, shape, false);
         }
     }
 }

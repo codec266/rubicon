@@ -1,5 +1,7 @@
 package com.gabriel.draw.controller;
 
+
+import com.gabriel.draw.view.DrawingStatusBar;
 import com.gabriel.draw.model.Ellipse;
 import com.gabriel.draw.model.Line;
 import com.gabriel.draw.model.Rectangle;
@@ -17,15 +19,18 @@ import java.awt.geom.Ellipse2D;
 public class DrawingController  implements MouseListener, MouseMotionListener {
     private Point end;
     final private DrawingView drawingView;
-
+    private final DrawingStatusBar statusBar;
     Shape currentShape;
-    AppService appService;
-     public DrawingController(AppService appService, DrawingView drawingView){
+    private final AppService appService;
+
+    public DrawingController(AppService appService, DrawingView drawingView, DrawingStatusBar statusBar){
        this.appService = appService;
-         this.drawingView = drawingView;
-         drawingView.addMouseListener(this);
-         drawingView.addMouseMotionListener(this);
-     }
+       this.drawingView = drawingView;
+       this.statusBar = statusBar;
+       drawingView.addMouseListener(this);
+       drawingView.addMouseMotionListener(this);
+
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -38,16 +43,27 @@ public class DrawingController  implements MouseListener, MouseMotionListener {
             start = e.getPoint();
             switch (appService.getShapeMode()){
                 case Line:  currentShape = new Line(start, start);
+                    currentShape.setColor(appService.getColor());
+                    currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,false );
+                    appService.setDrawMode(DrawMode.MousePressed);
                     break;
                 case Rectangle:
                     currentShape = new Rectangle(start, start);
+                    currentShape.setColor(appService.getColor());
+                    currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,false );
+                    appService.setDrawMode(DrawMode.MousePressed);
                     break;
                 case  Ellipse:
                     currentShape = new Ellipse(start, start);
+                    currentShape.setColor(appService.getColor());
+                    currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,false );
+                    appService.setDrawMode(DrawMode.MousePressed);
                     break;
+                default:
+                    return;
             }
-            currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,false );
-            appService.setDrawMode(DrawMode.MousePressed);
+
+
         }
     }
 
@@ -55,9 +71,13 @@ public class DrawingController  implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent e) {
          if(appService.getDrawMode() == DrawMode.MousePressed){
              end = e.getPoint();
+             currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,true );
+             appService.scale(currentShape,end);
+             currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,false );
              appService.create(currentShape);
              appService.setDrawMode(DrawMode.Idle);
            }
+        statusBar.setCurrentShapeMode(appService.getShapeMode());
     }
 
     @Override
@@ -78,10 +98,12 @@ public class DrawingController  implements MouseListener, MouseMotionListener {
                 appService.scale(currentShape,end);
                 currentShape.getRendererService().render(drawingView.getGraphics(), currentShape,true );
            }
+
+        statusBar.setCurrentCoordinates(e.getPoint());
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        statusBar.setCurrentCoordinates(e.getPoint());
     }
 }

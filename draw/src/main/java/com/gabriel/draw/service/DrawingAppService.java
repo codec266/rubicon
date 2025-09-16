@@ -24,6 +24,7 @@ public class DrawingAppService implements AppService {
         scalerService = new ScalerService();
         drawing.setDrawMode(DrawMode.Idle);
         drawing.setShapeMode(ShapeMode.Ellipse);
+        //drawing.setColor(Color.BLACK);
     }
 
     @Override
