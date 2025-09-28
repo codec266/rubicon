@@ -33,14 +33,12 @@ public class Main {
         drawingMenuBar.setVisible(true);
         drawingFrame.setJMenuBar(drawingMenuBar);
 
-        // drawing tool bar
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.add(drawingToolBar, BorderLayout.NORTH);
-        contentPanel.add(drawingView, BorderLayout.CENTER);
         drawingToolBar.setFloatable(false); // locks panel in place
 
-        // drawing status bar
-        contentPanel.add(statusBar, BorderLayout.SOUTH);
+        contentPanel.add(drawingToolBar, BorderLayout.NORTH); // drawing tool bar
+        contentPanel.add(drawingView, BorderLayout.CENTER); // drawing view
+        contentPanel.add(statusBar, BorderLayout.SOUTH); // drawing status bar
 
         drawingFrame.setContentPane(contentPanel);
 
